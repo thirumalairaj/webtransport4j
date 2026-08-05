@@ -1,11 +1,13 @@
 package io.github.webtransport4j.server;
 
+import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.HttpResponseStatus;
+import io.netty.handler.codec.http3.DefaultHttp3DataFrame;
 import io.netty.handler.codec.http3.DefaultHttp3Headers;
 import io.netty.handler.codec.http3.DefaultHttp3HeadersFrame;
 import io.netty.handler.codec.http3.Http3DataFrame;
@@ -18,6 +20,7 @@ import io.netty.handler.codec.quic.QuicStreamChannel;
 import io.netty.util.Attribute;
 import io.netty.util.ReferenceCountUtil;
 import java.net.URI;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -65,11 +68,26 @@ class WebTransportHeadersHandler extends Http3RequestStreamInboundHandler {
       ctx.writeAndFlush(new DefaultHttp3HeadersFrame(headers));
       return;
     }
+
     // TEST the server GET request
     if ("GET".contentEquals(method)) {
+        
       Http3Headers responseHeaders = new DefaultHttp3Headers();
       responseHeaders.status(HttpResponseStatus.OK.codeAsText());
       ctx.writeAndFlush(new DefaultHttp3HeadersFrame(responseHeaders));
+
+        ByteBuf body = ctx.alloc().buffer();
+        body.writeCharSequence("Hello HTTP/3", StandardCharsets.UTF_8);
+
+        ctx.writeAndFlush(new DefaultHttp3DataFrame(body)).addListener(f -> {;
+            if (f.isSuccess()) {
+                logger.info("✅ Sent response body successfully.");
+            } else {
+                logger.error("❌ Failed to send response body: {}", f.cause().getMessage());
+            }
+        });
+
+      return;
     }
     if ("CONNECT".contentEquals(method)
         && ("webtransport-h3".contentEquals(protocol) || "webtransport".contentEquals(protocol))) {
@@ -203,19 +221,20 @@ class WebTransportHeadersHandler extends Http3RequestStreamInboundHandler {
           Http3Headers responseHeaders = new DefaultHttp3Headers();
           responseHeaders.status(HttpResponseStatus.OK.codeAsText());
 
-          if (mgr != null) {
 
-              mgr.register(connectStream);
-
-              connectStream
-                      .closeFuture()
-                      .addListener(
-                              f -> {
-                                  mgr.unregister(connectStream);
-                              });
-          }
-
-          ctx.writeAndFlush(new DefaultHttp3HeadersFrame(responseHeaders));
+          ctx.writeAndFlush(new DefaultHttp3HeadersFrame(responseHeaders)).addListener(f -> {
+              if (f.isSuccess()) {
+                  if (mgr != null) {
+                      mgr.register(connectStream);
+                      connectStream
+                              .closeFuture()
+                              .addListener(
+                                      f1 -> {
+                                          mgr.unregister(connectStream);
+                                      });
+                  }
+              }
+          });
           if (logger.isDebugEnabled()) {
               logger.debug("🌊 Stream 0 AutoRead: {}", ctx.channel().config().isAutoRead());
           }
@@ -223,6 +242,7 @@ class WebTransportHeadersHandler extends Http3RequestStreamInboundHandler {
               logger.debug("🌊 Stream 0 Pipeline post-handshake: {}", ctx.pipeline().names());
           }
       }
+      return;
     }
   }
 
