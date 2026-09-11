@@ -2,7 +2,9 @@
   <img src="assets/banner.svg" alt="webtransport4j" width="100%" />
 </p>
 
-<h1 align="center">webtransport4j</h1>
+<h1 align="center">
+  webtransport<span style="color:#7C3AED;">4j</span>
+</h1>
 
 <p align="center">
   <strong>WebTransport over HTTP/3 for Java, built on Netty and QUIC.</strong>
@@ -38,6 +40,20 @@
   <a href="#benchmarking">Benchmarks</a>
   ·
   <a href="#project-status">Project Status</a>
+</p>
+
+## Sponsors
+
+<p align="left">
+  <kbd>
+    <a href="https://stau.ai">
+      <img src="assets/stau-ai.png" alt="Sponsored by STAU.AI" height="45">
+    </a>
+  </kbd>
+</p>
+
+<p align="left">
+  <sub>Sponsored by <a href="https://stau.ai"><strong>STAU.AI</strong></a></sub>
 </p>
 
 ---
