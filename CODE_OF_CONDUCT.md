@@ -28,6 +28,14 @@ Examples of unacceptable behavior include:
 
 Community leaders are responsible for clarifying and enforcing our standards of acceptable behavior and will take appropriate and fair corrective action in response to any behavior that they deem inappropriate, threatening, offensive, or harmful.
 
+## Reporting Conduct Concerns
+
+Instances of abusive, harassing, or otherwise unacceptable behavior may be reported privately to the project maintainers:
+* **@thirumalairaj** ([github.com/thirumalairaj](https://github.com/thirumalairaj))
+* **@sanjomo** ([github.com/sanjomo](https://github.com/sanjomo))
+
+Please reach out to either maintainer via the contact methods listed on their GitHub profile. All complaints will be reviewed and investigated promptly and fairly, and maintainers are obligated to respect the privacy and security of the reporter.
+
 ## Scope
 
 This Code of Conduct applies within all community spaces, and also applies when an individual is officially representing the community in public spaces.

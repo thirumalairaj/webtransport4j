@@ -12,9 +12,7 @@ The WebTransport4J team takes the security of our library seriously.
 
 If you discover a security vulnerability within `webtransport4j`, please do **not** report it via a public GitHub issue.
 
-Instead, please report security vulnerabilities privately by:
-1. Opening a **Draft Security Advisory** directly on GitHub under the repository's "Security" tab.
-2. Or reaching out to the maintainers privately via GitHub.
+Instead, please report security vulnerabilities privately using the repository's **[Report a vulnerability](https://github.com/webtransport4j/webtransport4j/security/advisories/new)** button under **Security → Advisories**. This route ensures your report is delivered securely to repository maintainers without requiring elevated repository permissions.
 
 ### What to include in your report:
 * A description of the vulnerability and its potential impact.
